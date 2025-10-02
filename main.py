@@ -1,3 +1,3 @@
-from services.processo_service import ProcessoService
+from services.rpa_challenge_service import RpaChallengeService
 
-run = ProcessoService()
+run = RpaChallengeService()
