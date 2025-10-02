@@ -19,7 +19,7 @@ Projeto para realizar o desafio RPA Challenge com Python.
  
     ├──helpers                                         # Representa todo o código que auxilia o serviço do robô.
     │   ├── tratar_erro_helper.py                                    # Código que realiza o tratamento de erros que podem ocorrer durante a execução do robô.
-    │   ├── cria_arquivo_log_helper.py                                    # Código que realiza a criação do arquivo de log para o dia atual.
+    │   ├── criar_arquivo_log_helper.py                                    # Código que realiza a criação do arquivo de log para o dia atual.
     │   ├── excel_helper.py                                    # Código que realiza ações no arquivo excel.
     │   ├── selenium_helper.py                                    # Código que realiza ações com selenium.
     ├── services                                       # Representa todo o código que realiza o serviço do robô.  
