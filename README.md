@@ -1,6 +1,6 @@
-# RPA com Python
+# RPA Challenge
  
-Projeto para criar o Bot Template para ser usado em bots criados em python.
+Projeto para realizar o desafio RPA Challenge com Python.
  
  
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=status&message=em%20desenvolvimento&color=GREEN&s…)
