@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium-grid
+    shm_size: 2gb
+
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+
+    environment:
+      - SE_VNC_PASSWORD=secret
+      - SE_NODE_MAX_SESSIONS=2
+      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
+
+    volumes:
+      - ./downloads:/home/seluser/Downloads

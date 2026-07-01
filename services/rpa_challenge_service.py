@@ -20,6 +20,7 @@ class RpaChallengeService(BrowserService):
 
     def execucao(self) -> None:
         driver = self.abrir_navegador()
+        self.maximizar_janela(driver)
         navegar_site_rpa_challenge(driver)
         excluir_arquivo_excel()
         baixar_excel(driver)
@@ -36,3 +37,4 @@ class RpaChallengeService(BrowserService):
                 inserir_nome_empresa(driver, dados_linha["Company Name"])
                 inserir_funcao_empresa(driver, dados_linha["Role in Company"])
                 clicar_botao_enviar(driver)
+        self.fechar_navegador(driver)

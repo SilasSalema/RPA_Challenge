@@ -4,6 +4,7 @@ import json
 
 from selenium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.chrome.options import Options
 
 from helpers.tratar_erro_helper import *
 from urllib3.exceptions import ProtocolError
@@ -74,7 +75,17 @@ class BrowserService:
         return options_browser
 
     def _get_options_docker(self, options_browser):
-        options_browser.add_argument("--headless")
+        # options_browser.add_argument("--headless")
+        pasta_download_container = f"/home/seluser/Downloads/teste"
+
+        chrome_prefs = {
+            "download.default_directory": pasta_download_container,
+            "download.prompt_for_download": False,
+            "download.directory_upgrade": True,
+            "safebrowsing.enabled": True,
+        }
+
+        options_browser.experimental_options["prefs"] = chrome_prefs
         return options_browser
 
     def _get_options_remote(self, options_browser):
@@ -126,16 +137,24 @@ class BrowserService:
     def _get_driver_local(self, options_browser):
         match self._get_browser():
             case "firefox":
-                return webdriver.Firefox(options=options_browser)
+                return webdriver.Remote(
+                    command_executor=self._get_remote_url(), options=options_browser
+                )
             case default:
-                return webdriver.Chrome(options=options_browser)
+                return webdriver.Remote(
+                    command_executor=self._get_remote_url(), options=options_browser
+                )
 
     def _get_driver_docker(self, options_browser):
         match self._get_browser():
             case "firefox":
-                return webdriver.Firefox(options=options_browser)
+                return webdriver.Remote(
+                    command_executor=self._get_remote_url(), options=options_browser
+                )
             case default:
-                return webdriver.Chrome(options=options_browser)
+                return webdriver.Remote(
+                    command_executor=self._get_remote_url(), options=options_browser
+                )
 
     def _get_driver_remote(self, options_browser):
         try:
@@ -156,15 +175,18 @@ class BrowserService:
         driver.set_page_load_timeout(120)
         return driver
 
-    def abrir_nova_aba(self, driver) -> None:
+    def abrir_nova_aba(self, driver: WebDriver) -> None:
         driver.switch_to.new_window("tab")
 
-    def focar_na_aba(self, driver, numero_aba: int) -> None:
+    def focar_na_aba(self, driver: WebDriver, numero_aba: int) -> None:
         driver.switch_to.window(driver.window_handles[numero_aba])
 
-    def fechar_aba(self, driver) -> None:
+    def fechar_aba(self, driver: WebDriver) -> None:
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
 
-    def fechar_navegador(self, driver) -> None:
+    def maximizar_janela(self, driver: WebDriver) -> None:
+        driver.maximize_window()
+
+    def fechar_navegador(self, driver: WebDriver) -> None:
         driver.quit()
