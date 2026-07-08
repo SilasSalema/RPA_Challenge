@@ -14,21 +14,92 @@ Projeto para realizar o desafio RPA Challenge com Python.
 * [Confira aqui!](https://www.selenium.dev/pt-br/documentation/)
  
  
-## Estrutura do projeto
+## Estrutura do projeto (MVC + POM)
 ```
  
-    ├──helpers                                         # Representa todo o código que auxilia o serviço do robô.
-    │   ├── tratar_erro_helper.py                                    # Código que realiza o tratamento de erros que podem ocorrer durante a execução do robô.
-    │   ├── criar_arquivo_log_helper.py                                    # Código que realiza a criação do arquivo de log para o dia atual.
-    │   ├── excel_helper.py                                    # Código que realiza ações no arquivo excel.
-    │   ├── selenium_helper.py                                    # Código que realiza ações com selenium.
-    ├── services                                       # Representa todo o código que realiza o serviço do robô.  
-    │   ├── rpa_challenge_service.py                                   # Código que realiza o processo completo.
-    │   ├── browser_service.py                                  # Código que realiza as ações principais no selenium (abrir e fechar navegador, abrir e fechar aba).
-    ├── main.py                                         # Código que realiza o inicio da execução do robô.
-    ├── requirements.txt                                # Lista de dependências e suas respectivas versões.
-    └── README.md                                       # Arquivo com orientações inicias do projeto e detalhes importantes.
+    ├── config/                                        # Configurações centralizadas da aplicação
+    │   └── config.py                                  # Variáveis de ambiente, URLs, XPaths e timeouts
+    │
+    ├── models/                                        # Camada Model - Definição de dados
+    │   └── employee.py                                # Modelo de dados para representar um funcionário
+    │
+    ├── pages/                                         # Page Object Model - Abstração de elementos UI
+    │   ├── base_page.py                               # Classe base com métodos comuns para interação
+    │   └── rpa_challenge_page.py                      # Page Object para o site RPA Challenge
+    │
+    ├── controllers/                                   # Camada Controller - Lógica de negócio
+    │   └── rpa_challenge_controller.py                # Controller que orquestra o fluxo da aplicação
+    │
+    ├── services/                                      # Serviços de suporte
+    │   ├── browser_service.py                         # Gerenciamento do Selenium WebDriver
+    │
+    ├── helpers/                                       # Utilitários auxiliares
+    │   ├── tratar_erro_helper.py                      # Tratamento de erros e captura de screenshots
+    │   ├── criar_arquivo_log_helper.py                # Configuração de logging
+    │   ├── excel_helper.py                            # Operações com arquivos Excel
+    │
+    ├── main.py                                        # Ponto de entrada da aplicação
+    ├── requirements.txt                               # Dependências do projeto
+    └── README.md                                      # Este arquivo
 ```
+
+## Padrões de Arquitetura Utilizados
+
+### MVC (Model-View-Controller)
+- **Model**: Camada de dados (`models/`) - Define a estrutura de dados (Employee)
+- **View**: Camada de apresentação (`pages/`) - Abstrações da interface de usuário (POM)
+- **Controller**: Camada de lógica de negócio (`controllers/`) - Orquestra o fluxo da aplicação
+
+### POM (Page Object Model)
+- **BasePage**: Classe base com métodos reutilizáveis de interação com elementos
+- **RpaChallengePageObject**: Implementação específica para a página do RPA Challenge
+- Centraliza todos os XPaths e métodos de interação na página em uma única classe
+- Facilita manutenção quando elementos da página mudam
+
+## Como Adicionar Novas Páginas
+
+Para adicionar uma nova página ao projeto:
+
+1. **Criar uma classe que herda de BasePage** em `pages/`:
+```python
+from pages.base_page import BasePage
+
+class NovaPageObject(BasePage):
+    def __init__(self, driver):
+        super().__init__(driver)
+    
+    # Adicionar métodos específicos da página
+```
+
+2. **Importar e usar no controller**:
+```python
+from pages.nova_page import NovaPageObject
+
+page = NovaPageObject(self.driver)
+page.seu_metodo()
+```
+
+## Como Adicionar Novos Modelos
+
+Para criar um novo modelo de dados:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class NovoModelo:
+    campo1: str
+    campo2: int
+```
+
+## Como Criar um Novo Controller
+
+Para criar um novo fluxo de automação:
+
+1. Herde de `BrowserService`
+2. Use injeção de dependência para Logger
+3. Implemente os métodos de seu fluxo
+4. Chame a partir de `main.py`
 ## Configuração de Ambiente
 - Realize o download e instação do [Python 3.12.3](https://www.python.org/downloads/release/python-3115/)
 #### OBS.: Para evitar problemas de compatibilidade, desinstale qualquer versão anterior do python.
@@ -77,6 +148,33 @@ Caso opte pelo Visual Studio Code, [clique aqui](https://code.visualstudio.com/d
 ```
 python main.py
 ```
+
+## Testes Unitários
+
+O projeto possui uma suite completa de **29 testes unitários** cobrindo todos os componentes críticos.
+
+### Executar todos os testes
+
+```bash
+python -m unittest discover tests/ -v
+```
+
+**Resultado esperado:**
+```
+Ran 29 tests in 0.063s
+OK
+```
+
+### Para mais detalhes sobre testes
+
+- Consulte [TESTING.md](TESTING.md) - Guia completo de testes
+- Consulte [tests/README.md](tests/README.md) - Documentação dos testes
+
+### Cobertura
+
+- ✅ Modelo Employee: criação, conversão Excel, igualdade
+- ✅ Configuração: ambiente, variáveis, caminhos
+- ✅ Page Object Model: inicialização, XPaths, métodos
  
 ## Autores
  
